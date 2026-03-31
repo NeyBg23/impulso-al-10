@@ -4,14 +4,14 @@
   "installCommand": "pnpm install",
   "framework": null,
   "functions": {
-    "dist/index.js": {
+    "server/_core/index.ts": {
       "runtime": "nodejs20.x"
     }
   },
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/dist/index.js"
+      "destination": "/server/_core/index.ts"
     }
   ]
 }
