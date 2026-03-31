@@ -51,7 +51,7 @@
 - [ ] Importar datos a Vercel Postgres
 - [ ] Actualizar variables de entorno para usar DATABASE_URL de Vercel
 - [x] Desplegar en Vercel
-- [ ] Verificar funcionamiento
+- [x] Verificar funcionamiento
 
 ## GitHub
 - [ ] Repositorio privado creado
