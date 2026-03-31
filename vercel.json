@@ -4,14 +4,14 @@
   "installCommand": "pnpm install",
   "builds": [
     {
-      "src": "server/_core/index.ts",
+      "src": "dist/index.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/server/_core/index.ts"
+      "dest": "/dist/index.js"
     }
   ]
 }
