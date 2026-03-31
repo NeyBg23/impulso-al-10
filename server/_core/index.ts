@@ -53,10 +53,8 @@ async function startServer() {
     serveStatic(app);
   }
 
-  // For Vercel deployment, export the app
-  if (process.env.VERCEL) {
-    export default app;
-  } else {
+  // Only start local dev server when not running in Vercel
+  if (!process.env.VERCEL) {
     const preferredPort = parseInt(process.env.PORT || "3000");
     const port = await findAvailablePort(preferredPort);
 
@@ -70,4 +68,33 @@ async function startServer() {
   }
 }
 
-startServer().catch(console.error);
+if (process.env.VERCEL) {
+  // For Vercel, export the app; Vercel handles server start
+  export default (async () => {
+    const app = express();
+    // Configure middleware before router registration
+    app.use(express.json({ limit: "50mb" }));
+    app.use(express.urlencoded({ limit: "50mb", extended: true }));
+    registerOAuthRoutes(app);
+    registerPdfRoutes(app);
+    app.use(
+      "/api/trpc",
+      createExpressMiddleware({
+        router: appRouter,
+        createContext,
+      })
+    );
+
+    if (process.env.NODE_ENV === "development") {
+      const server = createServer(app);
+      await setupVite(app, server);
+    } else {
+      serveStatic(app);
+    }
+
+    return app;
+  })();
+} else {
+  startServer().catch(console.error);
+}
+
