@@ -26,8 +26,7 @@ export async function setupVite(app: Express, server: Server) {
 
     try {
       const clientTemplate = path.resolve(
-        import.meta.dirname,
-        "../..",
+        process.cwd(),
         "client",
         "index.html"
       );
@@ -48,17 +47,21 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
-  const distPath = path.resolve(
-    import.meta.dirname,
-    "../..",
-    "dist",
-    "public"
-  );
+  // In Vercel, the dist/public directory is at the root level
+  const distPath = path.resolve(process.cwd(), "dist", "public");
+
+  console.log(`Serving static files from: ${distPath}`);
+  console.log(`Directory exists: ${fs.existsSync(distPath)}`);
 
   if (!fs.existsSync(distPath)) {
     console.error(
       `Could not find the build directory: ${distPath}, make sure to build the client first`
     );
+    // List contents of current directory for debugging
+    console.log("Current directory contents:", fs.readdirSync(process.cwd()));
+    if (fs.existsSync(path.resolve(process.cwd(), "dist"))) {
+      console.log("dist contents:", fs.readdirSync(path.resolve(process.cwd(), "dist")));
+    }
   }
 
   app.use(express.static(distPath));

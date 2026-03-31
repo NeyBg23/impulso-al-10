@@ -90,7 +90,7 @@ if (process.env.VERCEL) {
   // In Vercel, always serve static files
   serveStatic(app);
 
-  export default app;
+  module.exports = app;
 } else {
   startServer().catch(console.error);
 }
